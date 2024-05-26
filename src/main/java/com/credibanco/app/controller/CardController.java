@@ -1,7 +1,6 @@
 package com.credibanco.app.controller;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.credibanco.app.dtos.ActivateCardDTO;
+import com.credibanco.app.dtos.GenerateCardNumberDTO;
+import com.credibanco.app.dtos.ReloadBalanceDTO;
 import com.credibanco.app.entities.Card;
 import com.credibanco.app.services.CardService;
 
@@ -22,14 +24,14 @@ public class CardController {
     @Autowired
     private CardService cardService;
 
-    @GetMapping("/{productId}/number")
-    public String generateCardNumber(@PathVariable String productId) {
-        return cardService.generateCardNumber(productId);
+    @PostMapping("/number")
+    public String generateCardNumber(@RequestBody GenerateCardNumberDTO dto) {
+        return cardService.generateCardNumber(dto.getProductId(), dto.getHolderName());
     }
 
     @PostMapping("/enroll")
-    public ResponseEntity<Card> activateCard(@RequestBody Map<String, String> payload) {
-        return ResponseEntity.ok(cardService.activateCard(payload.get("cardId")));
+    public ResponseEntity<Card> activateCard(@RequestBody ActivateCardDTO dto) {
+        return ResponseEntity.ok(cardService.activateCard(dto.getCardId()));
     }
 
     @DeleteMapping("/{cardId}")
@@ -38,10 +40,8 @@ public class CardController {
     }
 
     @PostMapping("/balance")
-    public ResponseEntity<Card> reloadBalance(@RequestBody Map<String, Object> payload) {
-        String cardId = (String) payload.get("cardId");
-        BigDecimal amount = new BigDecimal((String) payload.get("balance"));
-        return ResponseEntity.ok(cardService.reloadBalance(cardId, amount));
+    public ResponseEntity<Card> reloadBalance(@RequestBody ReloadBalanceDTO dto) {
+        return ResponseEntity.ok(cardService.reloadBalance(dto.getCardId(), dto.getBalance()));
     }
 
     @GetMapping("/balance/{cardId}")

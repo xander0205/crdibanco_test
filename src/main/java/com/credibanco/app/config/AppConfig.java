@@ -1,10 +1,17 @@
 package com.credibanco.app.config;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+
 
 @Configuration
-@EntityScan("com.credibanco.app.entities")
-public class AppConfig {
-    
+@PropertySources({
+	@PropertySource(value="classpath:controllers.properties"),
+	@PropertySource(value="classpath:messages.properties", encoding="UTF-8")
+	
+})
+public class AppConfig{
+
+
 }
