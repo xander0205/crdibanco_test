@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
-public class TransactionService {
+public class TransactionService implements ITransactionService{
 	private static final Logger logger = LoggerFactory.getLogger(TransactionService.class);
 
 	@Autowired
@@ -28,9 +28,11 @@ public class TransactionService {
 
 	@Autowired
 	private TransactionRepository transactionRepository;
+	
 	@Autowired
 	private CardRepository cardRepository;
-
+	
+	@Override
 	public TransactionDTO purchase(String cardId, BigDecimal amount) {
 		Card card = cardRepository.findById(cardId).orElseThrow(
 				() -> new MessageNotFoundException(messages.getProperty("message.response.cardNotFound") + cardId));
@@ -73,7 +75,8 @@ public class TransactionService {
 
 		return transactionDTO;
 	}
-
+	
+	@Override
 	public TransactionDTO cancelTransaction(String cardId, Long transactionId) {
 		Transaction transaction = transactionRepository.findById(transactionId).orElseThrow(
 				() -> new MessageNotFoundException(messages.getProperty("message.response.transaction.transNotFound")));
@@ -96,7 +99,8 @@ public class TransactionService {
 
 		return transactionDTO;
 	}
-
+	
+	@Override
 	public TransactionDTO getTransaction(Long transactionId) {
 		Transaction transaction = transactionRepository.findById(transactionId).orElseThrow(
 				() -> new MessageNotFoundException(messages.getProperty("message.response.transaction.transNotFound")));

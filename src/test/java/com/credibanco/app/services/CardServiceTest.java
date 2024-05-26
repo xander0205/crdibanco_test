@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.credibanco.app.entities.Card;
 import com.credibanco.app.repositories.CardRepository;
+import com.credibanco.app.services.CardService;
 
 class CardServiceTest {
 

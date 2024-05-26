@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.credibanco.app.dtos.CancelTransactionDTO;
 import com.credibanco.app.dtos.PurchaseDTO;
 import com.credibanco.app.dtos.TransactionDTO;
-import com.credibanco.app.services.TransactionService;
+import com.credibanco.app.services.ITransactionService;
 
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
     @Autowired
-    private TransactionService transactionService;
+    private ITransactionService transactionService;
 
     @PostMapping("/purchase")
     public ResponseEntity<TransactionDTO> purchase(@RequestBody PurchaseDTO dto) {

@@ -13,20 +13,25 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.core.env.Environment;
 
 import com.credibanco.app.dtos.TransactionDTO;
 import com.credibanco.app.entities.Card;
 import com.credibanco.app.entities.Transaction;
 import com.credibanco.app.repositories.CardRepository;
 import com.credibanco.app.repositories.TransactionRepository;
+import com.credibanco.app.exceptions.MessageNotFoundException;
 
 class TransactionServiceTest {
+
+    @Mock
+    private CardRepository cardRepository;
 
     @Mock
     private TransactionRepository transactionRepository;
 
     @Mock
-    private CardRepository cardRepository;
+    private Environment messages;
 
     @InjectMocks
     private TransactionService transactionService;
@@ -74,8 +79,9 @@ class TransactionServiceTest {
         card.setActive(false);
 
         when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
+        when(messages.getProperty("message.response.transaction.cardNotActive")).thenReturn("Card is not active");
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        MessageNotFoundException exception = assertThrows(MessageNotFoundException.class, () -> {
             transactionService.purchase(cardId, amount);
         });
 

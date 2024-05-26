@@ -16,13 +16,13 @@ import com.credibanco.app.dtos.ActivateCardDTO;
 import com.credibanco.app.dtos.GenerateCardNumberDTO;
 import com.credibanco.app.dtos.ReloadBalanceDTO;
 import com.credibanco.app.entities.Card;
-import com.credibanco.app.services.CardService;
+import com.credibanco.app.services.ICardService;
 
 @RestController
 @RequestMapping("/card")
 public class CardController {
     @Autowired
-    private CardService cardService;
+    private ICardService cardService;
 
     @PostMapping("/number")
     public String generateCardNumber(@RequestBody GenerateCardNumberDTO dto) {
