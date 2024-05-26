@@ -6,12 +6,17 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.core.env.Environment;
 
 import com.credibanco.app.entities.Card;
+import com.credibanco.app.exceptions.MessageNotFoundException;
 import com.credibanco.app.repositories.CardRepository;
 
 @Service
 public class CardService {
+	@Autowired
+	private Environment messages;
+		
     @Autowired
     private CardRepository cardRepository;
 
@@ -30,25 +35,25 @@ public class CardService {
     }
 
     public Card activateCard(String cardId) {
-        Card card = cardRepository.findById(cardId).orElseThrow(() -> new RuntimeException("Card not found"));
+    	Card card = cardRepository.findById(cardId).orElseThrow(() -> new MessageNotFoundException(messages.getProperty("message.response.card.cardNotFound") + cardId));
         card.setActive(true);
         return cardRepository.save(card);
     }
 
     public Card blockCard(String cardId) {
-        Card card = cardRepository.findById(cardId).orElseThrow(() -> new RuntimeException("Card not found"));
-        card.setBlocked(true);
+    	Card card = cardRepository.findById(cardId).orElseThrow(() -> new MessageNotFoundException(messages.getProperty("message.response.card.cardNotFound") + cardId));
+    	card.setBlocked(true);
         return cardRepository.save(card);
     }
 
     public Card reloadBalance(String cardId, BigDecimal amount) {
-        Card card = cardRepository.findById(cardId).orElseThrow(() -> new RuntimeException("Card not found"));
+    	Card card = cardRepository.findById(cardId).orElseThrow(() -> new MessageNotFoundException(messages.getProperty("message.response.card.cardNotFound") + cardId));
         card.setBalance(card.getBalance().add(amount));
         return cardRepository.save(card);
     }
 
     public BigDecimal getBalance(String cardId) {
-        Card card = cardRepository.findById(cardId).orElseThrow(() -> new RuntimeException("Card not found"));
+    	Card card = cardRepository.findById(cardId).orElseThrow(() -> new MessageNotFoundException(messages.getProperty("message.response.card.cardNotFound") + cardId));
         return card.getBalance();
     }
    
